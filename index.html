@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="normalize.css" media="screen">
+    <link rel="stylesheet" href="resets.css" media="screen">
+    <link rel="stylesheet" href="css/styles.css" media="screen">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online CV</title>
+</head>
+<body>
+    <header>
+        <ul class="nav">
+            <li><a href="#about">About</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </header>
+
+    <div class="container">
+        <img src="your-image.jpg" alt="Centered Image" class="center-image">
+        <p>I am an image and I'm all by myself</p>
+    </div>
+
+    <div class="page-content">
+        <div class="card" id="about">
+            <p class="card-header">About</p>
+            <p class="card-body">Hello! Tell us about yourself.</p>
+        </div>
+        <div class="card" id="education">
+            <p class="card-header">Education</p>
+            <p class="card-body">Tell us about your education</p>
+        </div>
+        <div class="card" id="skills">
+            <p class="card-header">Skills</p>
+            <p class="card-body">Tell us about your IT Skills</p>
+        </div>
+        <div class="card" id="portfolio">
+            <p class="card-header">Portfolio</p>
+            <p class="card-body">Share your previous IT projects</p>
+
+            <h2>Courses Taken</h2>
+
+            <!-- Added Search Input -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search for a course..." onkeyup="filterCourses()">
+            </div>
+            
+            
+            <ul id="courses-taken" class="card-body"></ul>
+        </div>
+    </div>
+
+    <script>
+        const jsonURL = "https://desireeshortiee.github.io/courses.json/courses.json";
+        
+        fetch(jsonURL)
+            .then(response => response.json()) 
+            .then(data => {
+                let courseList = document.getElementById("courses-taken");
+
+                if (data.courses && Array.isArray(data.courses)) {
+                    data.courses.forEach(course => {
+                        let listItem = document.createElement("li");
+                        listItem.textContent = `${course.year_level} Year, ${course.sem} Semester: ${course.code} - ${course.description} (${course.credit} Credits)`;
+                        listItem.classList.add("course-item"); // Added a class for filtering
+                        courseList.appendChild(listItem);
+                    });
+                } else {
+                    console.error("Expected 'courses' array but got:", data);
+                }
+            })
+            .catch(error => console.error("Error fetching JSON:", error));
+
+        // Search function to filter courses
+        function filterCourses() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let courseItems = document.getElementsByClassName("course-item");
+
+            for (let i = 0; i < courseItems.length; i++) {
+                let text = courseItems[i].textContent.toLowerCase();
+                courseItems[i].style.display = text.includes(input) ? "" : "none";
+            }
+        }
+    </script>
+
+    <br><br><br>
+    <footer>
+        <p>I am a footer, the last section of this page</p> 
+    </footer>
+</body>
+</html>
